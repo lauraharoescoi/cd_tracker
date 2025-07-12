@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import '../models/cd_model.dart';
 import '../services/firestore_service.dart';
-import '../widgets/cd_spine_widget.dart';
+import '../widgets/album_cover_widget.dart'; // Importar el nuevo widget
 import 'album_detail_screen.dart';
 import 'search_screen.dart';
 
@@ -66,13 +66,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
               List<CD> cdList = snapshot.data!.docs.map((doc) => CD.fromFirestore(doc)).toList();
 
               return ReorderableGridView.builder(
-                padding: const EdgeInsets.only(top: kToolbarHeight + 40, left: 8, right: 8, bottom: 8),
+                padding: const EdgeInsets.only(top: kToolbarHeight + 40, left: 12, right: 12, bottom: 12),
                 itemCount: cdList.length,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 100,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 0.4,
+                // Delegado de la cuadrícula ajustado para carátulas cuadradas
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, // 3 carátulas por fila
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.75, // Proporción para carátula + texto
                 ),
                 itemBuilder: (context, index) {
                   CD cd = cdList[index];
@@ -87,7 +88,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                         ),
                       ),
                     ),
-                    child: CdSpineWidget(
+                    // Usar el nuevo widget de carátula
+                    child: AlbumCoverWidget(
                       title: cd.title,
                       artist: cd.artist,
                       coverUrl: cd.coverUrl,
