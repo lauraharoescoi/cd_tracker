@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'auth_gate.dart'; // Importar el AuthGate
+import 'auth_gate.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -77,7 +77,6 @@ class CdTrackerApp extends StatelessWidget {
           ),
         ),
       ),
-      // CORRECCIÓN: Se asegura de que la app empieza en el AuthGate
       home: const AuthGate(), 
       debugShowCheckedModeBanner: false,
     );

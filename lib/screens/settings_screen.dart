@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'help_screen.dart'; // Importar la nueva pantalla de ayuda
+import 'about_screen.dart'; // Importar la nueva pantalla de about
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -10,12 +12,10 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // CORRECCIÓN: Se crea una única instancia del servicio
   final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    // Se obtiene el usuario de la instancia del servicio
     final User? user = _authService.currentUser;
 
     return Padding(
@@ -46,13 +46,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70),
               ),
             ),
-          ] else ...[
-            const Center(child: Text('Not logged in')),
           ],
+          const SizedBox(height: 40),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.help_outline),
+                  title: const Text('Help & How-to'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HelpScreen()),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.info_outline),
+                  title: const Text('About'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const AboutScreen()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
           const Spacer(),
           ElevatedButton.icon(
             onPressed: () async {
-              // Se usa la instancia creada para cerrar sesión
               await _authService.signOut();
             },
             icon: const Icon(Icons.logout),
