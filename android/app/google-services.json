@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "782322338023",
+    "project_id": "cd-tracker",
+    "storage_bucket": "cd-tracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782322338023:android:6a84ce515f5e6bc22d7a42",
+        "android_client_info": {
+          "package_name": "com.example.cd_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "782322338023-ttq6v4cdl2vvrbejmaps0j2tft7hohfm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcBUyhmypPdKOzMH0yAUfJpQhfGZ0YL1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782322338023-ttq6v4cdl2vvrbejmaps0j2tft7hohfm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "782322338023-8glk6a867kdikm4iq1diqfj6t5n1jbb5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cdTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

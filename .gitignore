@@ -1,0 +1,17 @@
+# Archivos generados por Flutter y el IDE
+.dart_tool/
+.idea/
+.vscode/
+build/
+*.iml
+*.ipr
+*.iws
+
+.packages
+pubspec.lock
+
+lib/firebase_options.dart
+
+.DS_Store
+
+lib/services/spotify_service.dart
