@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'library_screen.dart';
+import 'search_screen.dart';
+import 'settings_screen.dart'; // Importar la nueva pantalla de ajustes
 import 'wishlist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,6 +17,13 @@ class _HomeScreenState extends State<HomeScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     LibraryScreen(),
     WishlistScreen(),
+    SettingsScreen(),
+  ];
+
+  static const List<String> _appBarTitles = <String>[
+    'My Library',
+    'My Wishlist',
+    'Settings',
   ];
 
   void _onItemTapped(int index) {
@@ -26,18 +35,41 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_appBarTitles[_selectedIndex]),
+        actions: [
+          if (_selectedIndex != 2)
+            IconButton(
+              icon: const Icon(Icons.search),
+              tooltip: 'Search for an album',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchScreen()),
+                );
+              },
+            ),
+        ],
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.album),
-            label: 'My Library',
+            icon: Icon(Icons.album_outlined),
+            activeIcon: Icon(Icons.album),
+            label: 'Library',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Icon(Icons.favorite_border),
+            activeIcon: Icon(Icons.favorite),
             label: 'Wishlist',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_outlined),
+            activeIcon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
         currentIndex: _selectedIndex,
