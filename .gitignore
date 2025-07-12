@@ -12,4 +12,6 @@ pubspec.lock
 
 lib/firebase_options.dart
 
+lib/config/spotify_credentials.dart
+
 .DS_Store
