@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/cd_model.dart';
 import '../services/firestore_service.dart';
-import 'search_screen.dart'; // Importar la nueva pantalla de búsqueda
+import 'album_detail_screen.dart'; // Importar la nueva pantalla
+import 'search_screen.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -21,7 +22,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
         title: const Text('My Library'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
-          // Añadir un botón de búsqueda a la AppBar
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
@@ -57,18 +57,25 @@ class _LibraryScreenState extends State<LibraryScreen> {
               itemBuilder: (context, index) {
                 CD cd = cdList[index];
                 return ListTile(
+                  // NUEVO: Navegar a la pantalla de detalle al pulsar
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AlbumDetailScreen(cd: cd),
+                      ),
+                    );
+                  },
                   leading: cd.coverUrl.isNotEmpty
                       ? Image.network(cd.coverUrl, width: 50, height: 50, fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => const Icon(Icons.album, size: 50),)
                       : const Icon(Icons.album, size: 50),
                   title: Text(cd.title),
                   subtitle: Text(cd.artist),
-                  // Añadimos un botón de borrado al final de cada elemento
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
                     tooltip: 'Delete from Library',
                     onPressed: () {
-                      // Llamamos a la función de borrado con el ID del documento
                       _firestoreService.deleteCDFromLibrary(cd.id);
                     },
                   ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/cd_model.dart';
 import '../services/firestore_service.dart';
+import 'album_detail_screen.dart'; // Importar la nueva pantalla
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -44,6 +45,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
               itemBuilder: (context, index) {
                 CD cd = wishlist[index];
                 return ListTile(
+                  // NUEVO: Navegar a la pantalla de detalle al pulsar
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AlbumDetailScreen(cd: cd),
+                      ),
+                    );
+                  },
                   leading: cd.coverUrl.isNotEmpty
                       ? Image.network(cd.coverUrl, width: 50, height: 50, fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => const Icon(Icons.album, size: 50),)

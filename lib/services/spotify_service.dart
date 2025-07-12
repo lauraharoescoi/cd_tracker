@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../config/spotify_credentials.dart'; // Importar las credenciales
+import '../config/spotify_credentials.dart';
 
 class SpotifyService {
-  // Las credenciales ya no se guardan aquí
   String? _accessToken;
   DateTime? _tokenExpiration;
 
@@ -12,7 +11,6 @@ class SpotifyService {
       return _accessToken;
     }
 
-    // Usamos las credenciales importadas del fichero de configuración
     final response = await http.post(
       Uri.parse('https://accounts.spotify.com/api/token'),
       headers: {
@@ -35,23 +33,36 @@ class SpotifyService {
 
   Future<List<dynamic>> searchAlbums(String query) async {
     final token = await _getAccessToken();
-    if (token == null) {
-      return [];
-    }
+    if (token == null) return [];
 
     final response = await http.get(
       Uri.parse('https://api.spotify.com/v1/search?q=$query&type=album&limit=20'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
+      headers: {'Authorization': 'Bearer $token'},
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['albums']['items'];
+      return jsonDecode(response.body)['albums']['items'];
     } else {
       print('Failed to search albums');
       return [];
+    }
+  }
+
+  // NUEVO: Obtener detalles de un álbum específico
+  Future<Map<String, dynamic>?> getAlbumDetails(String spotifyId) async {
+    final token = await _getAccessToken();
+    if (token == null) return null;
+
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/albums/$spotifyId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      print('Failed to get album details');
+      return null;
     }
   }
 }
