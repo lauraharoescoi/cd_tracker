@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:url_launcher/url_launcher.dart'; // Importar el nuevo paquete
 import '../models/cd_model.dart';
 import '../services/firestore_service.dart';
 import '../services/spotify_service.dart';
@@ -44,6 +45,19 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
     }
   }
 
+  // NUEVO: Función para lanzar la URL de Spotify
+  Future<void> _launchSpotifyUrl() async {
+    if (_albumDetails != null && _albumDetails!['external_urls']?['spotify'] != null) {
+      final Uri url = Uri.parse(_albumDetails!['external_urls']['spotify']);
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch $url')),
+        );
+      }
+    }
+  }
+
   Future<void> _showDeleteConfirmationDialog() async {
     return showDialog<void>(
       context: context,
@@ -78,6 +92,15 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // NUEVO: Se ha añadido un FloatingActionButton
+      floatingActionButton: _albumDetails != null
+          ? FloatingActionButton.extended(
+              onPressed: _launchSpotifyUrl,
+              label: const Text('Listen on Spotify'),
+              icon: const Icon(Icons.play_circle_fill),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            )
+          : null,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _albumDetails == null
@@ -118,7 +141,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                             ),
                             Center(
                               child: Padding(
-                                padding: const EdgeInsets.only(bottom: 50.0), // Adjust padding to not overlap with title
+                                padding: const EdgeInsets.only(bottom: 50.0),
                                 child: Hero(
                                   tag: widget.cd.id,
                                   child: Material(
