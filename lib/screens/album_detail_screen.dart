@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import '../models/cd_model.dart';
+import '../services/firestore_service.dart';
 import '../services/spotify_service.dart';
 
 class AlbumDetailScreen extends StatefulWidget {
   final CD cd;
+  final String sourceCollection; // 'library' o 'wishlist'
 
-  const AlbumDetailScreen({super.key, required this.cd});
+  const AlbumDetailScreen({
+    super.key,
+    required this.cd,
+    required this.sourceCollection,
+  });
 
   @override
   State<AlbumDetailScreen> createState() => _AlbumDetailScreenState();
@@ -13,6 +19,7 @@ class AlbumDetailScreen extends StatefulWidget {
 
 class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   final SpotifyService _spotifyService = SpotifyService();
+  final FirestoreService _firestoreService = FirestoreService();
   Map<String, dynamic>? _albumDetails;
   bool _isLoading = true;
 
@@ -36,11 +43,60 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
     }
   }
 
+  // NUEVO: Diálogo de confirmación para borrar
+  Future<void> _showDeleteConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // El usuario debe pulsar un botón
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to delete "${widget.cd.title}" from your ${widget.sourceCollection}?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: const Text('Delete'),
+              onPressed: () {
+                if (widget.sourceCollection == 'library') {
+                  _firestoreService.deleteCDFromLibrary(widget.cd.id);
+                } else {
+                  _firestoreService.deleteCDFromWishlist(widget.cd.id);
+                }
+                Navigator.of(context).pop(); // Cierra el diálogo
+                Navigator.of(context).pop(); // Vuelve a la pantalla anterior
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.cd.title),
+        // NUEVO: Botón de borrar
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_forever_outlined),
+            tooltip: 'Delete from ${widget.sourceCollection}',
+            onPressed: _showDeleteConfirmationDialog,
+          )
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

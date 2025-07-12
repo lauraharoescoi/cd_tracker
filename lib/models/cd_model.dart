@@ -6,6 +6,7 @@ class CD {
   final String title;
   final String artist;
   final String coverUrl;
+  final int orderIndex; // NUEVO: Para guardar el orden
 
   CD({
     required this.id,
@@ -13,6 +14,7 @@ class CD {
     required this.title,
     required this.artist,
     required this.coverUrl,
+    required this.orderIndex,
   });
 
   // Factory to create a CD from a Firestore document
@@ -24,6 +26,7 @@ class CD {
       title: data['title'] ?? 'No Title',
       artist: data['artist'] ?? 'No Artist',
       coverUrl: data['coverUrl'] ?? '',
+      orderIndex: data['orderIndex'] ?? 0,
     );
   }
   
@@ -34,6 +37,7 @@ class CD {
       'title': title,
       'artist': artist,
       'coverUrl': coverUrl,
+      'orderIndex': orderIndex,
     };
   }
 }

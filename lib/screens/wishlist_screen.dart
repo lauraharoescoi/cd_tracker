@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/cd_model.dart';
 import '../services/firestore_service.dart';
-import 'album_detail_screen.dart'; // Importar la nueva pantalla
+import 'album_detail_screen.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -45,12 +45,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
               itemBuilder: (context, index) {
                 CD cd = wishlist[index];
                 return ListTile(
-                  // NUEVO: Navegar a la pantalla de detalle al pulsar
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AlbumDetailScreen(cd: cd),
+                        builder: (context) => AlbumDetailScreen(
+                          cd: cd,
+                          // Le decimos a la pantalla de detalle que venimos de la wishlist
+                          sourceCollection: 'wishlist',
+                        ),
                       ),
                     );
                   },
@@ -71,13 +74,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('${cd.title} moved to your library!')),
                           );
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                        tooltip: 'Delete from Wishlist',
-                        onPressed: () {
-                          _firestoreService.deleteCDFromWishlist(cd.id);
                         },
                       ),
                     ],
