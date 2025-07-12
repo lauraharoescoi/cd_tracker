@@ -13,5 +13,3 @@ pubspec.lock
 lib/firebase_options.dart
 
 .DS_Store
-
-lib/services/spotify_service.dart
