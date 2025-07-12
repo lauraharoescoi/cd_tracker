@@ -53,7 +53,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Move to Library Button
                       IconButton(
                         icon: const Icon(Icons.shopping_cart_checkout),
                         tooltip: 'Move to Library',
@@ -64,7 +63,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           );
                         },
                       ),
-                      // Delete from Wishlist Button
                       IconButton(
                         icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
                         tooltip: 'Delete from Wishlist',

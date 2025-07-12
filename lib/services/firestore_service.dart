@@ -20,18 +20,11 @@ class FirestoreService {
 
   // --- Move from Wishlist to Library ---
   Future<void> moveCDFromWishlistToLibrary(CD cd) async {
-    // Use a batch write to perform multiple operations atomically
     WriteBatch batch = _db.batch();
-
-    // 1. Delete the document from the wishlist
     DocumentReference wishlistDocRef = _wishlistCollection.doc(cd.id);
     batch.delete(wishlistDocRef);
-
-    // 2. Create a new document in the library
-    DocumentReference libraryDocRef = _libraryCollection.doc();
-    batch.set(libraryDocRef, cd.toMap());
-
-    // Commit the batch
+    DocumentReference libraryDocRef = _libraryCollection.doc(); // Create new doc in library
+    batch.set(libraryDocRef, cd.toMap()); // Use toMap to include spotifyId
     await batch.commit();
   }
 }
