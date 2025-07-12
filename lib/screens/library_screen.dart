@@ -20,9 +20,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('My Library'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -35,7 +35,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage('https://www.transparenttextures.com/patterns/wood-pattern.png'),
+                image: NetworkImage('https://www.transparenttextures.com/patterns/dark-wood.png'),
                 repeat: ImageRepeat.repeat,
               ),
             ),
@@ -47,12 +47,16 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'Your library is empty. Tap the search icon to find and add a CD!',
-                      style: TextStyle(fontSize: 18, backgroundColor: Colors.black54),
+                return Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: const Text(
+                      'Your library is empty.\nTap the search icon to add a CD!',
+                      style: TextStyle(fontSize: 18),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -62,7 +66,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               List<CD> cdList = snapshot.data!.docs.map((doc) => CD.fromFirestore(doc)).toList();
 
               return ReorderableGridView.builder(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.only(top: kToolbarHeight + 40, left: 8, right: 8, bottom: 8),
                 itemCount: cdList.length,
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 100,
@@ -79,7 +83,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       MaterialPageRoute(
                         builder: (context) => AlbumDetailScreen(
                           cd: cd,
-                          // Le decimos a la pantalla de detalle que venimos de la librería
                           sourceCollection: 'library',
                         ),
                       ),
