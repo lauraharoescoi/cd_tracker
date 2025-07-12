@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'auth_gate.dart'; // Importar el AuthGate
 import 'firebase_options.dart';
-import 'screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,21 +24,28 @@ class CdTrackerApp extends StatelessWidget {
       title: 'CD Tracker',
       theme: baseTheme.copyWith(
         textTheme: GoogleFonts.montserratTextTheme(baseTheme.textTheme),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: accentColor,
-          brightness: Brightness.dark,
+        colorScheme: ColorScheme.dark(
           primary: accentColor,
           secondary: accentColor.shade200,
+          surface: const Color(0xFF121212),
+          background: const Color(0xFF121212),
+          onPrimary: Colors.white,
+          onSecondary: Colors.black,
+          onSurface: Colors.white,
+          onBackground: Colors.white,
+          onError: Colors.white,
+          brightness: Brightness.dark,
+          error: Colors.redAccent,
         ),
         scaffoldBackgroundColor: const Color(0xFF121212),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.transparent,
+          backgroundColor: const Color(0xFF1e1e1e),
           elevation: 0,
           centerTitle: true,
           titleTextStyle: GoogleFonts.montserrat(
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: Colors.white, // CORRECCIÓN: Se ha añadido el color blanco
+            color: Colors.white,
           ),
         ),
         cardTheme: CardThemeData(
@@ -47,7 +54,7 @@ class CdTrackerApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: Colors.white.withOpacity(0.1)),
           ),
-          color: Colors.grey[900]?.withOpacity(0.5),
+          color: const Color(0xFF1e1e1e),
         ),
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
@@ -60,17 +67,18 @@ class CdTrackerApp extends StatelessWidget {
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: accentColor,
           unselectedItemColor: Colors.grey[600],
-          backgroundColor: Colors.black.withOpacity(0.5),
+          backgroundColor: const Color(0xFF1e1e1e),
           elevation: 0,
         ),
         dialogTheme: DialogThemeData(
-          backgroundColor: const Color(0xFF1e1e1e),
+          backgroundColor: const Color(0xFF2a2a2a),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
       ),
-      home: const HomeScreen(),
+      // CORRECCIÓN: Se asegura de que la app empieza en el AuthGate
+      home: const AuthGate(), 
       debugShowCheckedModeBanner: false,
     );
   }
