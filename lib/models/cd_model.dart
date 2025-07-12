@@ -13,7 +13,6 @@ class CD {
     required this.coverUrl,
   });
 
-  // Factory constructor to create a CD from a Firestore document
   factory CD.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return CD(
@@ -22,5 +21,15 @@ class CD {
       artist: data['artist'] ?? 'No Artist',
       coverUrl: data['coverUrl'] ?? '',
     );
+  }
+  
+  // Method to convert CD instance to a map for Firestore
+  // Este es el método que faltaba
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'artist': artist,
+      'coverUrl': coverUrl,
+    };
   }
 }

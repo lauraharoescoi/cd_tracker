@@ -1,21 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/cd_model.dart';
 
 class FirestoreService {
-  final CollectionReference libraryCollection = FirebaseFirestore.instance.collection('library');
-  final CollectionReference wishlistCollection = FirebaseFirestore.instance.collection('wishlist');
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // GET: Leer stream de documentos de la colección 'library'
-  Stream<QuerySnapshot> getLibraryStream() {
-    return libraryCollection.snapshots();
-  }
+  // --- Library Methods ---
+  CollectionReference get _libraryCollection => _db.collection('library');
+  
+  Stream<QuerySnapshot> getLibraryStream() => _libraryCollection.snapshots();
+  Future<void> addCDToLibrary(Map<String, dynamic> cdData) => _libraryCollection.add(cdData);
+  Future<void> deleteCDFromLibrary(String docId) => _libraryCollection.doc(docId).delete();
 
-  // CREATE: Añadir un nuevo CD a la librería
-  Future<void> addCDToLibrary(Map<String, dynamic> cdData) {
-    return libraryCollection.add(cdData);
-  }
+  // --- Wishlist Methods ---
+  CollectionReference get _wishlistCollection => _db.collection('wishlist');
 
-  // DELETE: Borrar un CD de la librería usando su ID
-  Future<void> deleteCDFromLibrary(String docId) {
-    return libraryCollection.doc(docId).delete();
+  Stream<QuerySnapshot> getWishlistStream() => _wishlistCollection.snapshots();
+  Future<void> addCDToWishlist(Map<String, dynamic> cdData) => _wishlistCollection.add(cdData);
+  Future<void> deleteCDFromWishlist(String docId) => _wishlistCollection.doc(docId).delete();
+
+  // --- Move from Wishlist to Library ---
+  Future<void> moveCDFromWishlistToLibrary(CD cd) async {
+    // Use a batch write to perform multiple operations atomically
+    WriteBatch batch = _db.batch();
+
+    // 1. Delete the document from the wishlist
+    DocumentReference wishlistDocRef = _wishlistCollection.doc(cd.id);
+    batch.delete(wishlistDocRef);
+
+    // 2. Create a new document in the library
+    DocumentReference libraryDocRef = _libraryCollection.doc();
+    batch.set(libraryDocRef, cd.toMap());
+
+    // Commit the batch
+    await batch.commit();
   }
 }

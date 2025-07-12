@@ -18,17 +18,19 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _isLoading = false;
 
   void _performSearch() async {
-    if (_searchController.text.isEmpty) {
-      return;
-    }
-    setState(() {
-      _isLoading = true;
-    });
+    if (_searchController.text.isEmpty) return;
+    setState(() => _isLoading = true);
     final results = await _spotifyService.searchAlbums(_searchController.text);
     setState(() {
       _searchResults = results;
       _isLoading = false;
     });
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
+    );
   }
 
   @override
@@ -70,21 +72,32 @@ class _SearchScreenState extends State<SearchScreen> {
                         : const Icon(Icons.album, size: 50),
                     title: Text(album['name']),
                     subtitle: Text(artistName),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add_box),
-                      tooltip: 'Add to Library',
-                      onPressed: () {
-                        final cdData = {
-                          'title': album['name'],
-                          'artist': artistName,
-                          'coverUrl': imageUrl,
-                        };
-                        _firestoreService.addCDToLibrary(cdData).then((_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${album['name']} added to your library!')),
-                          );
-                        });
-                      },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Add to Wishlist Button
+                        IconButton(
+                          icon: const Icon(Icons.favorite_border),
+                          tooltip: 'Add to Wishlist',
+                          onPressed: () {
+                            final cdData = {'title': album['name'], 'artist': artistName, 'coverUrl': imageUrl};
+                            _firestoreService.addCDToWishlist(cdData).then((_) {
+                              _showSnackBar('${album['name']} added to your wishlist!');
+                            });
+                          },
+                        ),
+                        // Add to Library Button
+                        IconButton(
+                          icon: const Icon(Icons.add_box),
+                          tooltip: 'Add to Library',
+                          onPressed: () {
+                            final cdData = {'title': album['name'], 'artist': artistName, 'coverUrl': imageUrl};
+                            _firestoreService.addCDToLibrary(cdData).then((_) {
+                              _showSnackBar('${album['name']} added to your library!');
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   );
                 },
