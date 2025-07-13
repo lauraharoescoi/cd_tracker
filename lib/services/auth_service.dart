@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../config/spotify_credentials.dart'; // Importar nuestras credenciales
+import '../config/credentials.dart'; // Importar nuestras credenciales
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;

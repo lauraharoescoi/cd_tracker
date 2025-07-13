@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../config/spotify_credentials.dart';
+import '../config/credentials.dart';
 
 class SpotifyService {
   String? _accessToken;
