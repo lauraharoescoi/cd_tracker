@@ -1,6 +1,6 @@
 {
-    "name": "cd_tracker",
-    "short_name": "cd_tracker",
+    "name": "CD Tracker",
+    "short_name": "CD Tracker",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

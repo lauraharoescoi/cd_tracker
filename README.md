@@ -1,7 +1,7 @@
 # 🎵 CD Tracker
 
 <div align="center">
-  <img src="assets/logo.jpeg" alt="CD Tracker Logo" width="250" height="250">
+  <img src="assets/logo.png" alt="CD Tracker Logo" width="250" height="250">
   
   **Flutter app to track your physical CD collection**
   

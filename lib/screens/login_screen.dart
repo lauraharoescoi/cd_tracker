@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.album, size: 100, color: Colors.deepOrange),
+              Image.asset('assets/logo.png', height: 100),
               const SizedBox(height: 20),
               Text(
                 'CD Tracker',
